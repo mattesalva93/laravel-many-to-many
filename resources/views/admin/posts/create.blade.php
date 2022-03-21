@@ -43,7 +43,18 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-2">
+                            Inserisci i tags del tuo post
+                        </div>
+                        @foreach ($tags as $elemento)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="tags[]" value="{{$elemento->id}}" id="{{$elemento->slug}}">
+                            <label class="form-check-label" for="{{$elemento->slug}}">
+                                {{$elemento->name}}
+                            </label>
+                          </div>
+                        @endforeach
+                        <div class="form-group mt-4">
                             <label for="image">Inserisci un immagine per il tuo post</label>
                             <input type="file" name="image" class="form-control-file" id="image">
                         </div>

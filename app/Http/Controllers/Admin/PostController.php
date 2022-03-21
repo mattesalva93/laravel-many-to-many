@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,6 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -31,7 +31,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -42,12 +43,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $datoValidato = $request->validate([
+        $request->validate([
             'title' => 'required | string',
             'content' => 'required',
             'category_id' => 'nullable',
-            'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg'
+            'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg',
         ]);
+
+        $datoValidato = $request->all();
 
         $slugTemporaneo = Str::slug($datoValidato['title']);
         $contatore  = 1;
@@ -67,6 +70,7 @@ class PostController extends Controller
 
         $post->fill($datoValidato);
         $post->save();
+        $post->tags()->sync(isset($datoValidato['tags']) ? $datoValidato['tags'] : []);
         return redirect()->route('admin.posts.index');
     }
 
@@ -90,8 +94,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -103,12 +108,14 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post )
     {
-        $datoValidato = $request->validate([
+        $request->validate([
             'title' => 'required | string',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
             'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg'
         ]);
+
+        $datoValidato = $request->all();
 
         if($post->title == $datoValidato['title']){
             $slug = $post->slug;
@@ -128,6 +135,8 @@ class PostController extends Controller
         }
 
         $post->update($datoValidato);
+
+        $post->tags()->sync(isset($datoValidato['tags']) ? $datoValidato['tags'] : []);
 
         return redirect()->route('admin.posts.show', $post->id);
     }

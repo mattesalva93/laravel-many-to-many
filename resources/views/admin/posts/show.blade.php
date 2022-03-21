@@ -7,6 +7,11 @@
                 <h1>{{ $post->title }}</h1>
                 <p>{{ $post->content }}</p>
                 <p> CATEGORIA: {{ $post->category ? $post->category->name : 'none' }}</p>
+                <p> TAGS:
+                    @foreach ($post->tags as $tag)
+                        <i>{{ $tag->name }}</i>
+                    @endforeach
+                </p>
                 @if ($post->image != null)
                     <div>
                         <img src="{{ asset('storage/' . $post->image) }}" alt="">
@@ -17,7 +22,7 @@
                     </div>
                 @endif
 
-                <a  href="{{ route('admin.posts.index') }}">
+                <a href="{{ route('admin.posts.index') }}">
                     <button type="button" class="btn btn-secondary mt-5">
                         Ritorna all'elenco
                     </button>

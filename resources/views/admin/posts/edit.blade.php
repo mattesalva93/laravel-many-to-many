@@ -45,6 +45,17 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-2">
+                            Modifica i tags del tuo post
+                        </div>
+                        @foreach ($tags as $elemento)
+                        <div class="form-check">
+                            <input class="form-check-input"  id="{{$elemento->slug}}" type="checkbox" name="tags[]" value="{{$elemento->id}}" {{$post->tags->contains($elemento) ? " checked" : ""}}>
+                            <label class="form-check-label" for="{{$elemento->slug}}">
+                                {{$elemento->name}}
+                            </label>
+                          </div>
+                        @endforeach
                         @if ($post->image != null)
                             <div>
                                 <img src="{{ asset('storage/' . $post->image) }}" alt="">

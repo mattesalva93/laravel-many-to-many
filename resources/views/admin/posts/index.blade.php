@@ -16,6 +16,7 @@
                         <th scope="col">Titolo</th>
                         <th scope="col">Sezione</th>
                         <th scope="col">Categoria</th>
+                        <th scope="col">Tags</th>
                         <th scope="col">Immagine</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Azioni</th>
@@ -28,6 +29,11 @@
                             <td>{{ $elemento->title }}</td>
                             <td>{{ $elemento->content }}</td>
                             <td>{{ $elemento->category ? $elemento->category->name : 'none' }}</td>
+                            <td>
+                                @foreach ($elemento->tags as $tag)
+                                    {{$tag->name}}
+                                @endforeach
+                            </td>
                             <td> 
                                 @if ($elemento->image != null)
                                     <img src="{{ asset('storage/' . $elemento->image) }}" alt="">
