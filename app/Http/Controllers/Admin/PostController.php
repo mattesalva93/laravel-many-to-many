@@ -43,14 +43,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $datoValidato = $request->validate([
             'title' => 'required | string',
             'content' => 'required',
             'category_id' => 'nullable',
             'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg',
+            'tags' => 'array'
         ]);
 
-        $datoValidato = $request->all();
+        // $datoValidato = $request->all();
 
         $slugTemporaneo = Str::slug($datoValidato['title']);
         $contatore  = 1;
@@ -108,14 +109,15 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post )
     {
-        $request->validate([
+        $datoValidato = $request->validate([
             'title' => 'required | string',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg'
+            'image' => 'nullable | image | mimes:jpg,bmp,png,jpeg',
+            'tags' => 'array'
         ]);
 
-        $datoValidato = $request->all();
+        // $datoValidato = $request->all();
 
         if($post->title == $datoValidato['title']){
             $slug = $post->slug;
