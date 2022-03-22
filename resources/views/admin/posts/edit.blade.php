@@ -50,7 +50,13 @@
                         </div>
                         @foreach ($tags as $elemento)
                         <div class="form-check">
-                            <input class="form-check-input"  id="{{$elemento->slug}}" type="checkbox" name="tags[]" value="{{$elemento->id}}" {{$post->tags->contains($elemento) ? " checked" : ""}}>
+                            <input class="form-check-input"  id="{{$elemento->slug}}" type="checkbox" name="tags[]" value="{{$elemento->id}}" 
+                            @if ($errors->any())
+                                {{in_array($elemento->id, old('tags', [])) ? " checked" : ""}}
+                            @else
+                                {{$post->tags->contains($elemento) ? " checked" : ""}}
+                            @endif
+                            >
                             <label class="form-check-label" for="{{$elemento->slug}}">
                                 {{$elemento->name}}
                             </label>
